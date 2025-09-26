@@ -1,26 +1,26 @@
 //
-//  RoadObject.m
+//  ConnectionObject.m
 //  Golden Triangle
 //
 //  Created by Alex Bullard on 1/9/11.
 //  Copyright 2011 Middlebury College. All rights reserved.
 //
 
-#import "RoadObject.h"
+#import "ConnectionObject.h"
 
 
-@implementation RoadObject
+@implementation ConnectionObject
 
--(RoadObject *) initWithEndPoints:(double)roadWidth x1:(double)x_1 y1:(double)y_1 z1:(double)z_1 x2:(double)x_2 y2:(double)y_2 z2:(double)z_2 {
+-(ConnectionObject *) initWithEndPoints:(double)connectionWidth x1:(double)x_1 y1:(double)y_1 z1:(double)z_1 x2:(double)x_2 y2:(double)y_2 z2:(double)z_2 {
 	[super init];
-	x1=x_1; x2=x_2; y1=y_1; y2=y_2; z1=z_1; z2=z_2; totalRoadWidth = roadWidth;
+	x1=x_1; x2=x_2; y1=y_1; y2=y_2; z1=z_1; z2=z_2; totalConnectionWidth = connectionWidth;
 	wallPolygons = [[NSMutableArray alloc] init];
-	[self calculateRoadPolygons];
+	[self calculateConnectionPolygons];
 	return self;
 }
 
 // Currently just using left over space for 
-- (void) calculateRoadPolygons {
+- (void) calculateConnectionPolygons {
 	float deltaX = x2-x1;
 	float deltaZ = z2-z1;
 	double angle = atan2(deltaZ,deltaX);
@@ -33,19 +33,19 @@
 	intersectionz1 = z1+intersectiondz;
 	intersectionz2 = z2-intersectiondz;
 	
-	vector<CityPolygon> vp = vector<CityPolygon>();
-	vector<CityVertex> cv = vector<CityVertex>();
+	vector<OrgPolygon> vp = vector<OrgPolygon>();
+	vector<OrgVertex> cv = vector<OrgVertex>();
 	// Street
-	vector<CityVertex> tmp = [self generateRectangleFromLine:totalRoadWidth-2*CONST_SIDEWALK_SIZE x1:x1 y1:y1 z1:z1 x2:x2 y2:y2 z2:z2];
+	vector<OrgVertex> tmp = [self generateRectangleFromLine:totalConnectionWidth-2*CONST_SIDEWALK_SIZE x1:x1 y1:y1 z1:z1 x2:x2 y2:y2 z2:z2];
 	cv.insert(cv.end(), tmp.begin(), tmp.end());
 	GLfloat dl[4] = {0.0,0.0,0.0,1.0};
 	GLfloat sl[4] = {0.0,0.0,0.0,1.0};
 	GLfloat el[4] = {0.0,0.0,0.0,1.0};
 	int vn[4] = {0,1,2,3};
 	vector<int> vvn = vector<int>(vn, vn + sizeof(vn)/sizeof(vn[0]));
-	vp.push_back(CityPolygon(vvn,dl,sl,el,cv));
+	vp.push_back(OrgPolygon(vvn,dl,sl,el,cv));
 	
-	//CityPolyObject r1 = CityPolyObject([self generateRectangleFromLine:totalRoadWidth-2*CONST_SIDEWALK_SIZE x1:x1 y1:y1 z1:z1 x2:x2 y2:y2 z2:z2],
+	//OrgPolyObject r1 = OrgPolyObject([self generateRectangleFromLine:totalConnectionWidth-2*CONST_SIDEWALK_SIZE x1:x1 y1:y1 z1:z1 x2:x2 y2:y2 z2:z2],
 	//								   vp);
 	
 	// Lane Seperator
@@ -56,27 +56,27 @@
 	GLfloat el2[4] = {0.0,0.0,0.0,1.0};
 	int vn2[4] = {4,5,6,7};
 	vvn = vector<int>(vn2, vn2 + sizeof(vn2)/sizeof(vn2[0]));
-	vp.push_back(CityPolygon(vvn,dl2,sl2,el2,cv));
+	vp.push_back(OrgPolygon(vvn,dl2,sl2,el2,cv));
 	
-	//CityPolyObject r2 = CityPolyObject(,
+	//OrgPolyObject r2 = OrgPolyObject(,
 	//								   vp);
 
 	// sidewalk
-	tmp = [self generateRectangleFromLine:totalRoadWidth x1:intersectionx1 y1:y1-.03 z1:intersectionz1 x2:intersectionx2 y2:y2-.03 z2:intersectionz2];
+	tmp = [self generateRectangleFromLine:totalConnectionWidth x1:intersectionx1 y1:y1-.03 z1:intersectionz1 x2:intersectionx2 y2:y2-.03 z2:intersectionz2];
 	cv.insert(cv.end(), tmp.begin(), tmp.end());
 	GLfloat dl3[4] = {1.0,1.0,1.0,1.0};
 	GLfloat sl3[4] = {0.0,0.0,0.0,1.0};
 	GLfloat el3[4] = {0.0,0.0,0.0,1.0};
 	int vn3[4] = {8,9,10,11};
 	vvn = vector<int>(vn3, vn3 + sizeof(vn3)/sizeof(vn3[0]));
-	vp.push_back(CityPolygon(vvn,dl3,sl3,el3,cv));	
-	//vector<CityVertex> vcv = [self generateRectangleFromLine:totalRoadWidth x1:intersectionx1 y1:y1-.03 z1:intersectionz1 x2:intersectionx2 y2:y2-.03 z2:intersectionz2];
+	vp.push_back(OrgPolygon(vvn,dl3,sl3,el3,cv));	
+	//vector<OrgVertex> vcv = [self generateRectangleFromLine:totalConnectionWidth x1:intersectionx1 y1:y1-.03 z1:intersectionz1 x2:intersectionx2 y2:y2-.03 z2:intersectionz2];
 	vertices = cv;
 	faces = vp;
-	//road = CityPolyObject(cv,vp);;
+	//road = OrgPolyObject(cv,vp);;
 }
 
-- (vector<CityCoordinate>) intersections{
+- (vector<OrgCoordinate>) intersections{
 	float deltaX = x2-x1;
 	float deltaZ = z2-z1;
 	double mag = sqrt((deltaX*deltaX) + (deltaZ)*(deltaZ));
@@ -85,12 +85,12 @@
 	
 	double angle= atan2(dz,dx);
 	
-	double adjustX = (totalRoadWidth/2)*cos(angle+PI/2);
-	double adjustZ = (totalRoadWidth/2)*sin(angle+PI/2);
+	double adjustX = (totalConnectionWidth/2)*cos(angle+PI/2);
+	double adjustZ = (totalConnectionWidth/2)*sin(angle+PI/2);
 	
 	//return make_pair(make_pair(JPoint(intersectionx1-adjustX, intersectionz1-adjustZ), -angle+PI/2),make_pair(JPoint(intersectionx2+adjustX, intersectionz2+adjustZ), -angle-PI/2));
-	CityCoordinate a,b;
-	vector<CityCoordinate> coords = vector<CityCoordinate>();
+	OrgCoordinate a,b;
+	vector<OrgCoordinate> coords = vector<OrgCoordinate>();
 	double nx, nz, nr,tx,tz;
 	for (int j=0; j<2; j++) {
 		tx = 0.0; tz = 0.0;
@@ -107,7 +107,7 @@
 		tz = nx*sin(nr)+nz*cos(nr);
 		
 		nr = (nr/3.14159265)*180;
-		coords.push_back(CityCoordinate(tx,y1,tz,nr));
+		coords.push_back(OrgCoordinate(tx,y1,tz,nr));
 	}		
 	
 	return coords;
@@ -117,7 +117,7 @@
 	return wallPolygons;
 }
 //Make me better!
-- (void) roadPoly:(vector<CityVertex> &)v f:(vector<CityPolygon> &)f {
+- (void) connectionPoly:(vector<OrgVertex> &)v f:(vector<OrgPolygon> &)f {
 	int initsize = v.size();
 	for (int i=0; i<faces.size(); i++) {
 		for (int j=0; j<faces[i].vertexList.size(); j++) {
@@ -128,18 +128,18 @@
 	f.insert(f.end(), faces.begin(), faces.end());
 }
 
-- (double) roadWidth{
-	return totalRoadWidth;
+- (double) connectionWidth{
+	return totalConnectionWidth;
 }
 
-- (double) roadLength{
+- (double) connectionLength{
 	float deltaX = x2-x1;
 	float deltaZ = z2-z1;
 	double mag = sqrt((deltaX*deltaX) + (deltaZ)*(deltaZ));
 	return mag;
 }
 
-- (vector<CityVertex>) generateRectangleFromLine:(double)width x1:(double)x_1 y1:(double)y_1 z1:(double)z_1 x2:(double)x_2 y2:(double)y_2 z2:(double)z_2{
+- (vector<OrgVertex>) generateRectangleFromLine:(double)width x1:(double)x_1 y1:(double)y_1 z1:(double)z_1 x2:(double)x_2 y2:(double)y_2 z2:(double)z_2{
 	float deltaX = x_2-x_1;
 	float deltaZ = z_2-z_1;
 	
@@ -151,11 +151,11 @@
 	deltaX = (width/2)*cos(angle+PI/2);
 	deltaZ = (width/2)*sin(angle+PI/2);
 		
-	CityVertex vt[4] = {CityVertex(x_2+deltaX, y_2, z_2+deltaZ),
-					CityVertex(x_2-deltaX, y_2, z_2-deltaZ),
-					CityVertex(x_1-deltaX, y_1, z_1-deltaZ),			
-					CityVertex(x_1+deltaX, y_1, z_1+deltaZ)};
-	vector<CityVertex> vvt = vector<CityVertex>(vt, vt + sizeof(vt)/sizeof(vt[0]));
+	OrgVertex vt[4] = {OrgVertex(x_2+deltaX, y_2, z_2+deltaZ),
+					OrgVertex(x_2-deltaX, y_2, z_2-deltaZ),
+					OrgVertex(x_1-deltaX, y_1, z_1-deltaZ),			
+					OrgVertex(x_1+deltaX, y_1, z_1+deltaZ)};
+	vector<OrgVertex> vvt = vector<OrgVertex>(vt, vt + sizeof(vt)/sizeof(vt[0]));
 	return vvt;
 }
 @end

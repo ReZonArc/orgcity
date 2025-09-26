@@ -7,14 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "CityGLView.h"
+#import "OrgGLView.h"
 
 @interface Golden_TriangleAppDelegate : NSResponder {
     //NSWindow *window;
 	//NSWindow *fullScreenWindow;
 
 	NSTimer *renderTimer;
-	CityGLView *glView;
+	OrgGLView *glView;
 	//NSRect mainDisplayRect;
 	//NSRect viewRect;
 	//NSRect viewFullRect;

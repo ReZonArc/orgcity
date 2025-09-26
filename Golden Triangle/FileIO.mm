@@ -12,7 +12,7 @@
 
 @implementation FileIO
 
-+ (CityPolyObject) getPolygonObjectFromFile:(NSString *)filename scaler:(double)scaler{
++ (OrgPolyObject) getPolygonObjectFromFile:(NSString *)filename scaler:(double)scaler{
 	//NSMutableArray * polygons = [[NSMutableArray alloc] init];
 	NSError *error;
 	NSArray * contentsArray = [[NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource: filename ofType: @"obj"] encoding:NSUTF8StringEncoding error:&error] componentsSeparatedByString:@"\n"];
@@ -21,8 +21,8 @@
 	NSString * line;
 	int materialsBound = [[[[materialsArray objectAtIndex:1] componentsSeparatedByString:@" "] lastObject] intValue];
 	//NSMutableArray * coords =[[NSMutableArray alloc] init];
-	vector<CityVertex> vertices = vector<CityVertex>();
-	vector<CityPolygon> faces = vector<CityPolygon>();
+	vector<OrgVertex> vertices = vector<OrgVertex>();
+	vector<OrgPolygon> faces = vector<OrgPolygon>();
 	GLfloat diffuseColors [materialsBound][4];
 
 	// Create materials array
@@ -53,7 +53,7 @@
 
 		switch ([line characterAtIndex:0]) {
 			case 'v': // Define vertex
-				vertices.push_back(CityVertex(scaler * [[lineArray objectAtIndex:1] doubleValue],
+				vertices.push_back(OrgVertex(scaler * [[lineArray objectAtIndex:1] doubleValue],
 											  scaler * [[lineArray objectAtIndex:2] doubleValue],
 											  scaler * [[lineArray objectAtIndex:3] doubleValue]));				
 				break;
@@ -72,7 +72,7 @@
 					//[poly addObject:[coords objectAtIndex:coordIndex+1]];
 					//[poly addObject:[coords objectAtIndex:coordIndex+2]];
 				}
-				faces.push_back(CityPolygon(vIndices, diffuseColors[materialIndex], sc, ec));
+				faces.push_back(OrgPolygon(vIndices, diffuseColors[materialIndex], sc, ec));
 				//[polygons addObject:poly];
 				break;
 			}
@@ -92,7 +92,7 @@
 	}
 	NSLog(@"helloo90");
 	NSLog(@"sv %i sf %i", vertices.size(), faces.size());
-	return CityPolyObject(vertices, faces);
+	return OrgPolyObject(vertices, faces);
 	
 }
 @end

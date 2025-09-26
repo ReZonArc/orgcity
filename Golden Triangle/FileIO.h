@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "CityObject.h"
+#import "OrgObject.h"
 #import "voronoi.h"
 #import "BoundingPolygon.h"
 
@@ -16,6 +16,6 @@
 
 }
 
-+ (CityPolyObject) getPolygonObjectFromFile:(NSString *)filename scaler:(double)scaler;
++ (OrgPolyObject) getPolygonObjectFromFile:(NSString *)filename scaler:(double)scaler;
 
 @end

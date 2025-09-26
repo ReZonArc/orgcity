@@ -8,51 +8,51 @@
 
 #import <Cocoa/Cocoa.h>
 #import <vector>
-#import "CityMath.h"
+#import "OrgMath.h"
 
 using namespace std;
 
-struct CityNormal{
+struct OrgNormal{
 	float x,y,z;
-	CityNormal(){
+	OrgNormal(){
 		
 	};
-	CityNormal(double _x, double _y, double _z){
+	OrgNormal(double _x, double _y, double _z){
 		x = _x; y=_y; z=_z;
 	}
 };
 
-struct CityVertex{
+struct OrgVertex{
 	float x,y,z;
 	vector<int> faces;
-	CityNormal vertexNormal;
-	CityVertex(double _x, double _y, double _z){
+	OrgNormal vertexNormal;
+	OrgVertex(double _x, double _y, double _z){
 		x = _x; y =_y; z = _z;
 		faces = vector<int>();
 	}
-	CityVertex(){}
+	OrgVertex(){}
 };
 
 // Stores a location and a rotation
-struct CityCoordinate {
+struct OrgCoordinate {
 	float x,y,z,r;
-	CityCoordinate(double _x, double _y, double _z, double _r){
+	OrgCoordinate(double _x, double _y, double _z, double _r){
 		x = _x; y =_y; z = _z; r=_r;
 	}
-	CityCoordinate(){}	
+	OrgCoordinate(){}	
 };
 
-struct CityPolygon {
+struct OrgPolygon {
 	vector<int> vertexList;
-	CityNormal faceNormal;
+	OrgNormal faceNormal;
 	GLfloat diffuseLight[4];
 	GLfloat specularLight[4];
 	GLfloat emissiveLight[4];
 
-	CityPolygon() {
+	OrgPolygon() {
 		vertexList = vector<int>();
 	}
-	CityPolygon(vector <int> &vl, GLfloat dl[], GLfloat sl[], GLfloat el[]) {
+	OrgPolygon(vector <int> &vl, GLfloat dl[], GLfloat sl[], GLfloat el[]) {
 		vertexList = vector<int>(vl);
 		for(int i=0; i<4; i++){
 			diffuseLight[i] = dl[i];
@@ -61,7 +61,7 @@ struct CityPolygon {
 		}
 	}
 	/* create and calulate normal */
-	CityPolygon(vector <int> &vl, GLfloat dl[], GLfloat sl[], GLfloat el[], vector<CityVertex> &vertices) {
+	OrgPolygon(vector <int> &vl, GLfloat dl[], GLfloat sl[], GLfloat el[], vector<OrgVertex> &vertices) {
 		vertexList = vector<int>(vl);
 		for(int i=0; i<4; i++){
 			diffuseLight[i] = dl[i];
@@ -72,7 +72,7 @@ struct CityPolygon {
 	}
 	
 	/* create and calulate normal */
-	CityPolygon(vector <int> &vl, GLfloat dl[], GLfloat sl[], GLfloat el[], CityNormal &fnormal) {
+	OrgPolygon(vector <int> &vl, GLfloat dl[], GLfloat sl[], GLfloat el[], OrgNormal &fnormal) {
 		vertexList = vector<int>(vl);
 		for(int i=0; i<4; i++){
 			diffuseLight[i] = dl[i];
@@ -83,34 +83,34 @@ struct CityPolygon {
 	}
 	
 	
-	void calculateNormal(vector<CityVertex> &vertices){
-		CityVertex a = vertices[vertexList[0]]; 
-		CityVertex b = vertices[vertexList[1]]; 
-		CityVertex c = vertices[vertexList[2]];
+	void calculateNormal(vector<OrgVertex> &vertices){
+		OrgVertex a = vertices[vertexList[0]]; 
+		OrgVertex b = vertices[vertexList[1]]; 
+		OrgVertex c = vertices[vertexList[2]];
 		double normx = (a.z-b.z)*(c.y-b.y)-(a.y-b.y)*(c.z-b.z);
 		double normy = (a.x-b.x)*(c.z-b.z)-(a.z-b.z)*(c.x-b.x);
 		double normz = (a.y-b.y)*(c.x-b.x)-(a.x-b.x)*(c.y-b.y);
 		double normlength = sqrt(normx*normx+normy*normy+normz*normz);
-		faceNormal = CityNormal(normx /= normlength,normy /= normlength,normz /= normlength);
+		faceNormal = OrgNormal(normx /= normlength,normy /= normlength,normz /= normlength);
 	}
 };
 
-struct CityPolyObject {
-	vector<CityVertex> * vp;
-	vector<CityPolygon> * pp;
-	vector<CityVertex>  vertices;
-	vector<CityPolygon>  polygons;
+struct OrgPolyObject {
+	vector<OrgVertex> * vp;
+	vector<OrgPolygon> * pp;
+	vector<OrgVertex>  vertices;
+	vector<OrgPolygon>  polygons;
 	
-	CityPolyObject(vector<CityVertex> &cv,vector<CityPolygon> &cp) {
+	OrgPolyObject(vector<OrgVertex> &cv,vector<OrgPolygon> &cp) {
 		vp = &cv;
 		pp = &cp;
 		vertices = *vp;
 		polygons = *pp;
-//		vertices = vector<CityVertex>(cv);
-//		polygons = vector<CityPolygon>(cp);
+//		vertices = vector<OrgVertex>(cv);
+//		polygons = vector<OrgPolygon>(cp);
 	//	generateNormals();
 	}
-	CityPolyObject(){
+	OrgPolyObject(){
 		
 	}
 	void generateNormals () {
@@ -128,16 +128,16 @@ struct CityPolyObject {
 				ty += polygons[vertices[i].faces[j]].faceNormal.y;
 				tz += polygons[vertices[i].faces[j]].faceNormal.z;
 			}
-			vertices[i].vertexNormal = CityNormal(tx/vertices[i].faces.size(),ty/vertices[i].faces.size(),tz/vertices[i].faces.size());
+			vertices[i].vertexNormal = OrgNormal(tx/vertices[i].faces.size(),ty/vertices[i].faces.size(),tz/vertices[i].faces.size());
 		}*/
 	}
 };
 
-struct CityPregen {
-	vector< vector<CityCoordinate> > coordinates;
+struct OrgPregen {
+	vector< vector<OrgCoordinate> > coordinates;
 	
-	CityPregen(){
-		coordinates = vector< vector<CityCoordinate> >(2); //YOU SHOULD BE A CONSTANT
+	OrgPregen(){
+		coordinates = vector< vector<OrgCoordinate> >(2); //YOU SHOULD BE A CONSTANT
 	}
 };
 

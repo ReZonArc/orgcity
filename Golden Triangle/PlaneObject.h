@@ -7,10 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "CityObject.h"
+#import "OrgObject.h"
 
 
-@interface PlaneObject : CityObject {
+@interface PlaneObject : OrgObject {
 
 }
 

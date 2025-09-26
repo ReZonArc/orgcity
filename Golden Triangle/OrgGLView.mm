@@ -6,9 +6,9 @@
 //  Copyright 2010 Middlebury College. All rights reserved.
 //
 
-#import "CityGLView.h"
+#import "OrgGLView.h"
 
-@implementation CityGLView
+@implementation OrgGLView
 
 
 // Draw from polygonList
@@ -61,7 +61,7 @@
 	
 }
 
-- (void) createPolygonObject:(CityPolyObject) polygon index:(int)index {
+- (void) createPolygonObject:(OrgPolyObject) polygon index:(int)index {
 	glNewList(displayLists[index], GL_COMPILE);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glBegin(GL_TRIANGLES);
@@ -70,7 +70,7 @@
 		glMaterialfv(GL_FRONT, GL_SPECULAR, polygon.polygons[i].specularLight);
 		glMaterialfv(GL_FRONT, GL_EMISSION, polygon.polygons[i].emissiveLight);		
 		for(int j=0; j<polygon.polygons[i].vertexList.size(); j++){
-			CityVertex v = polygon.vertices[polygon.polygons[i].vertexList[j]];
+			OrgVertex v = polygon.vertices[polygon.polygons[i].vertexList[j]];
 			glNormal3f(v.vertexNormal.x, v.vertexNormal.y, v.vertexNormal.z);
 			glVertex3f(v.x, v.y, v.z);
 		}
@@ -88,12 +88,12 @@
 	[self createPolygonObject:[FileIO getPolygonObjectFromFile:@"stoplight" scaler:STOPLIGHT_SCALER] index:1];
 	[self createPolygonObject:[FileIO getPolygonObjectFromFile:@"owl" scaler:0.4] index:2];
 	
-	vector<CityVertex> vertices = vector<CityVertex>();
-	vector<CityPolygon> faces = vector<CityPolygon>();
-	CityPregen pregenCoords = CityPregen();
-	[CityGen masterGenerate:self vertices:vertices faces:faces pregenObjs:pregenCoords];
+	vector<OrgVertex> vertices = vector<OrgVertex>();
+	vector<OrgPolygon> faces = vector<OrgPolygon>();
+	OrgPregen pregenCoords = OrgPregen();
+	[OrgGen masterGenerate:self vertices:vertices faces:faces pregenObjs:pregenCoords];
 	[self addLoadingMessage:@"creating display lists..."];
-	vector< vector<CityPolygon> > sortedFaces = vector< vector<CityPolygon> >();
+	vector< vector<OrgPolygon> > sortedFaces = vector< vector<OrgPolygon> >();
 	vector<double> index = vector<double>();
 	for (int i=0; i<faces.size(); i++) {
 		double colorCheck = faces[i].diffuseLight[0];
@@ -110,7 +110,7 @@
 			sortedFaces[newIndex].push_back(faces[i]);
 		}else {
 			index.push_back(colorCheck);
-			vector<CityPolygon> tmp = vector<CityPolygon>();
+			vector<OrgPolygon> tmp = vector<OrgPolygon>();
 			sortedFaces.push_back(tmp);
 			sortedFaces.back().push_back(faces[i]);
 		}
@@ -171,7 +171,7 @@
 	glTranslated(0.0, -0.9, 0.0);
 	for (int i=0; i<=PREGEN_MAX; i++) {
 		for(int j=0; j<pregenCoords.coordinates[i].size(); j++){
-			CityCoordinate tcc = pregenCoords.coordinates[i][j];
+			OrgCoordinate tcc = pregenCoords.coordinates[i][j];
 			glRotated(tcc.r, 0.0, 1.0, 0.0);
 			glTranslated(tcc.x,0.0,tcc.z);
 			glCallList(displayLists[i]);
@@ -280,7 +280,7 @@
 				xRotated = [[recordedValues objectAtIndex:playbackIndex+4] doubleValue];
 				playbackIndex+=5;
 				NSLog(@"%i", playbackIndex);				
-			}else { // If at the end of the recording, load a different city
+			}else { // If at the end of the recording, load a different organization
 				loadState = 0;
 			}
 		}

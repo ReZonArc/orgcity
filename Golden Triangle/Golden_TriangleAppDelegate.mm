@@ -50,7 +50,7 @@
 	NSRect viewFullRect = NSMakeRect(0.0, 0.0, mainDisplayRect.size.width, mainDisplayRect.size.height);
 	//viewRect = NSMakeRect(0.0, 0.0, 800, 600);
 	
-	glView = [[CityGLView alloc] initWithFrame:viewFullRect pixelFormat: pixelFormat];
+	glView = [[OrgGLView alloc] initWithFrame:viewFullRect pixelFormat: pixelFormat];
 	[fullScreenWindow setContentView: glView];
 	[fullScreenWindow makeKeyAndOrderFront:self];
 	
