@@ -4,7 +4,9 @@
 //
 //  Created by Alex Bullard on 1/6/11.
 //  Copyright 2011 Middlebury College. All rights reserved.
-//
+//  
+//  Organizational chart generator - transforms spatial organization data
+//  into a 3D organizational hierarchy visualization
 
 #import <Cocoa/Cocoa.h>
 #import "DepartmentObject.h"

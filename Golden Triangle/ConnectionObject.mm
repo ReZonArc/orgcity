@@ -45,7 +45,7 @@
 	vector<int> vvn = vector<int>(vn, vn + sizeof(vn)/sizeof(vn[0]));
 	vp.push_back(OrgPolygon(vvn,dl,sl,el,cv));
 	
-	//CityPolyObject r1 = CityPolyObject([self generateRectangleFromLine:totalConnectionWidth-2*CONST_SIDEWALK_SIZE x1:x1 y1:y1 z1:z1 x2:x2 y2:y2 z2:z2],
+	//OrgPolyObject r1 = OrgPolyObject([self generateRectangleFromLine:totalConnectionWidth-2*CONST_SIDEWALK_SIZE x1:x1 y1:y1 z1:z1 x2:x2 y2:y2 z2:z2],
 	//								   vp);
 	
 	// Lane Seperator
@@ -58,7 +58,7 @@
 	vvn = vector<int>(vn2, vn2 + sizeof(vn2)/sizeof(vn2[0]));
 	vp.push_back(OrgPolygon(vvn,dl2,sl2,el2,cv));
 	
-	//CityPolyObject r2 = CityPolyObject(,
+	//OrgPolyObject r2 = OrgPolyObject(,
 	//								   vp);
 
 	// sidewalk
@@ -73,7 +73,7 @@
 	//vector<OrgVertex> vcv = [self generateRectangleFromLine:totalConnectionWidth x1:intersectionx1 y1:y1-.03 z1:intersectionz1 x2:intersectionx2 y2:y2-.03 z2:intersectionz2];
 	vertices = cv;
 	faces = vp;
-	//road = CityPolyObject(cv,vp);;
+	//road = OrgPolyObject(cv,vp);;
 }
 
 - (vector<OrgCoordinate>) intersections{

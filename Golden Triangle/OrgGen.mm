@@ -11,39 +11,39 @@
 
 @implementation OrgGen
 
-//TODO change to instance of CityGLView
+//TODO change to instance of OrgGLView
 + (void) masterGenerate:(NSView *)glView vertices:(vector<OrgVertex> &)vertices faces:(vector<OrgPolygon> &)faces pregenObjs:(OrgPregen &)pregenList{
 	//NSMutableArray * polygons3D = [[NSMutableArray alloc] initWithObjects:nil];
-	//vector<CityPolyObject> polygons3D = vector<CityPolyObject>(500);
+	//vector<OrgPolyObject> polygons3D = vector<OrgPolyObject>(500);
 	//OrgPregen pregenList = OrgPregen();
 	[glView addLoadingMessage:@"building organization..."];
 	[glView addLoadingMessage:@"generating voronoi diagrams..."];
 	[OrgGen addPlane:vertices f:faces];
-	pair<list<list<JPoint> >, pair<list<Segment>,list<Segment> > > city = GenerateVoronoi(RANDSEED, NUMCONTROL, MINX, MAXX, MINZ, MAXZ);
+	pair<list<list<JPoint> >, pair<list<Segment>,list<Segment> > > org = GenerateVoronoi(RANDSEED, NUMCONTROL, MINX, MAXX, MINZ, MAXZ);
 	[glView addLoadingMessage:@"creating departments..."];
 	double cx = MINX + (MAXX-MINX)/2;
 	double cz = MINZ + (MAXZ-MINZ)/2;
 	
 	double maxDist = MAXX-cx + MAXZ - cz;
 	
-	[OrgGen addOrgDepartments:vertices f:faces diagram:city.first centerX:cx z:cz maxDist:maxDist];
+	[OrgGen addOrgDepartments:vertices f:faces diagram:org.first centerX:cx z:cz maxDist:maxDist];
 	[glView addLoadingMessage:@"establishing connections..."];
 
 	//list<pair<JPoint, double> > stoplightPos;
-	for(list<Segment>::iterator sit = city.second.first.begin(); sit != city.second.first.end(); ++sit){
+	for(list<Segment>::iterator sit = org.second.first.begin(); sit != org.second.first.end(); ++sit){
 		ConnectionObject * tmp = [[ConnectionObject alloc] initWithEndPoints:6.0 x1:(*sit).p.x y1:-.9 z1:(*sit).p.y x2:(*sit).q.x y2:-0.9 z2:(*sit).q.y];
 		vector<OrgCoordinate> tmpV = [tmp intersections];
 		if ([tmp connectionLength] > 5.0) {
-			pregenList.coordinates[STOPLIGHT_INDEX].insert(pregenList.coordinates[STOPLIGHT_INDEX].end(), tmpV.begin(), tmpV.end());
+			pregenList.coordinates[NODE_MARKER_INDEX].insert(pregenList.coordinates[NODE_MARKER_INDEX].end(), tmpV.begin(), tmpV.end());
 		}
 		[tmp connectionPoly:vertices f:faces];
 
 	}
-	for(list<Segment>::iterator sit = city.second.second.begin(); sit != city.second.second.end(); ++sit){
+	for(list<Segment>::iterator sit = org.second.second.begin(); sit != org.second.second.end(); ++sit){
 		ConnectionObject * tmp =[[ConnectionObject alloc] initWithEndPoints:3.0 x1:(*sit).p.x y1:-.9 z1:(*sit).p.y x2:(*sit).q.x y2:-0.9 z2:(*sit).q.y];
 		vector<OrgCoordinate> tmpV = [tmp intersections];
 		if ([tmp connectionLength] > 5.0) {
-			pregenList.coordinates[STOPSIGN_INDEX].insert(pregenList.coordinates[STOPSIGN_INDEX].end(), tmpV.begin(), tmpV.end());
+			pregenList.coordinates[CONNECTOR_SIGN_INDEX].insert(pregenList.coordinates[CONNECTOR_SIGN_INDEX].end(), tmpV.begin(), tmpV.end());
 		}
 		[tmp connectionPoly:vertices f:faces];
 	}
@@ -74,7 +74,7 @@
 		double z = (*p).front().y;
 
 		double dist = abs(cz-z) + abs(cx-x);
-		double avgH = 2+30*[CityMath bell:dist/40 sigma:.7 mu:0];
+		double avgH = 2+30*[OrgMath bell:dist/40 sigma:.7 mu:0];
 		[DepartmentObject initWithBounds:vertices faces:faces startIndex:startIndex avgHeight:avgH];
 	}
 }

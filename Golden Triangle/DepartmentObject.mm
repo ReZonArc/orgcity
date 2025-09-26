@@ -70,7 +70,7 @@
 	cx /= vertices.size()-ovn;
 	cy /= vertices.size()-ovn;
 	cz /= vertices.size()-ovn;
-	cy += max([CityMath gausian:1.0 deviation:.5],0.0f);
+	cy += max([OrgMath gausian:1.0 deviation:.5],0.0f);
 	OrgVertex center(cx, cy, cz);
 	vertices.push_back(center);
 	for (int v=ovn; v<vertices.size()-1; v++) {
@@ -86,7 +86,7 @@
 	
 	//faces.push_back(OrgPolygon(tv,dl,sl,el));
 	// defining the building also generates the normals
-	//building = CityPolyObject(vertices, faces);
+	//building = OrgPolyObject(vertices, faces);
 	
 	// Add Windows to all building faces except top
 	
@@ -96,7 +96,7 @@
 	for (int i=startIndexFace; i<povn; i++) {
 		[self addWindowsToFace:i v:vertices f:faces wx:windowSizeX wy:windowSizeY sx:windowSeparationX sy:windowSeparationY];
 	}
-	//building = CityPolyObject(vertices, faces);	
+	//building = OrgPolyObject(vertices, faces);	
 
 
 }
@@ -131,12 +131,12 @@
 	}
 	faces.push_back(OrgPolygon(tv,dl,sl,el));
 	// defining the building also generates the normals
-	//building = CityPolyObject(vertices, faces);
+	//building = OrgPolyObject(vertices, faces);
 	
 	// Add Windows to all building faces except top
 	/*ovn = faces.size();
 	for (int i=0; i<ovn-1; i++) {
-		CityPolyObject tmp = [self addWindowsToFace:faces[i]];
+		OrgPolyObject tmp = [self addWindowsToFace:faces[i]];
 		//change indices
 		int vertexEnd = vertices.size();
 		for (int p=0; p<tmp.polygons.size(); p++) {
@@ -148,10 +148,10 @@
 		vertices.insert(vertices.end(), tmp.vertices.begin(), tmp.vertices.end());
 		faces.insert(faces.end(), tmp.polygons.begin(), tmp.polygons.end());
 	}
-	//building = CityPolyObject(vertices, faces);	
+	//building = OrgPolyObject(vertices, faces);	
 }
 
-- (CityPolyObject) cityPoly{
+- (OrgPolyObject) orgPoly{
 	return building;
 }*/
 
@@ -211,7 +211,7 @@
 		zAccum = zInit+(deltaZ*(cornerWindowBufferX/buildingFaceWidth)+adjustedWindowSpacerZ);
 		for(int j=0; j<numOfWindowsX; j++){
 			//CounterClockwise?
-			CityNormal norm = faces[faceIndex].faceNormal;
+			OrgNormal norm = faces[faceIndex].faceNormal;
 			vertices.push_back(OrgVertex(xAccum + norm.x*.01, deltaY-yAccum + norm.y*.01, zAccum + norm.z*.01));
 			vertices.push_back(OrgVertex(xAccum+directionAdjustX*adjustedWindowX+ norm.x*.01, deltaY-yAccum+ norm.y*.01, zAccum+adjustedWindowZ+ norm.z*.01));
 			vertices.push_back(OrgVertex(xAccum+directionAdjustX*adjustedWindowX+ norm.x*.01, deltaY-yAccum-windowSizeY+ norm.y*.01, zAccum+adjustedWindowZ+ norm.z*.01));
@@ -246,7 +246,7 @@
 		}
 		yAccum += windowSizeY+2*windowSeparationY;
 	}
-	//return CityPolyObject(wVertices, wPolygons);
+	//return OrgPolyObject(wVertices, wPolygons);
 }
 
 /*
@@ -258,13 +258,13 @@
 	NSMutableArray * top = [[NSMutableArray alloc] init];
 	for(float i=0; i<2*3.14159265; i+=panelSize){
 		[polygonList addObject:[[BoundingPolygon alloc] initWithCoord:[[NSArray alloc] initWithObjects:
-																	   [[CityPoint alloc] initWithX:x+cos(i)*r y:y+departmentHeight z:z+sin(i)*r],
-																	   [[CityPoint alloc] initWithX:x+cos(i+panelSize)*r y:y+departmentHeight z:z+sin(i+panelSize)*r],
-																	   [[CityPoint alloc] initWithX:x+cos(i+panelSize)*r y:y z:z+sin(i+panelSize)*r],
-																	   [[CityPoint alloc] initWithX:x+cos(i)*r y:y z:z+sin(i)*r], nil]
+																	   [[OrgPoint alloc] initWithX:x+cos(i)*r y:y+departmentHeight z:z+sin(i)*r],
+																	   [[OrgPoint alloc] initWithX:x+cos(i+panelSize)*r y:y+departmentHeight z:z+sin(i+panelSize)*r],
+																	   [[OrgPoint alloc] initWithX:x+cos(i+panelSize)*r y:y z:z+sin(i+panelSize)*r],
+																	   [[OrgPoint alloc] initWithX:x+cos(i)*r y:y z:z+sin(i)*r], nil]
 														  andColorRed:0.0 green:1.0 blue:0.0 border:false]];
-		[bottom addObject:[[CityPoint alloc] initWithX:x+cos(i)*r y:y z:z+sin(i)*r]];
-		[top addObject:[[CityPoint alloc] initWithX:x+cos(i)*r y:y z:z+sin(i)*r]];
+		[bottom addObject:[[OrgPoint alloc] initWithX:x+cos(i)*r y:y z:z+sin(i)*r]];
+		[top addObject:[[OrgPoint alloc] initWithX:x+cos(i)*r y:y z:z+sin(i)*r]];
 	}
 	[polygonList addObject:[[BoundingPolygon alloc] initWithCoord:bottom andColorRed:0.0 green:1.0 blue:0.0 border:true]];
 	[polygonList addObject:[[BoundingPolygon alloc] initWithCoord:top andColorRed:0.0 green:1.0 blue:0.0 border:true]];	

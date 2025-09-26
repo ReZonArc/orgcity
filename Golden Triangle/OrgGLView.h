@@ -24,11 +24,11 @@ using namespace std;
 #define MAX_DISPLAY_LISTS 128
 #define DMOVE 0.40
 
-// Blender Objects
-#define STOPSIGN_INDEX 0
-#define STOPSIGN_SCALER 0.05
-#define STOPLIGHT_INDEX 1
-#define STOPLIGHT_SCALER 0.1
+// Organizational Objects
+#define CONNECTOR_SIGN_INDEX 0
+#define CONNECTOR_SIGN_SCALER 0.05
+#define NODE_MARKER_INDEX 1
+#define NODE_MARKER_SCALER 0.1
 #define PREGEN_MAX 1
 
 //Texture Constants

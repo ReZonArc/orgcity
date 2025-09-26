@@ -280,7 +280,7 @@
 				xRotated = [[recordedValues objectAtIndex:playbackIndex+4] doubleValue];
 				playbackIndex+=5;
 				NSLog(@"%i", playbackIndex);				
-			}else { // If at the end of the recording, load a different city
+			}else { // If at the end of the recording, load a different organization
 				loadState = 0;
 			}
 		}
