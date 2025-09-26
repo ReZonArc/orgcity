@@ -1,5 +1,5 @@
 //
-//  CityMath.h
+//  OrgMath.h
 //  Golden Triangle
 //
 //  Created by Alex Bullard on 1/6/11.
@@ -9,7 +9,7 @@
 //#import <Cocoa/Cocoa.h>
 #import <stdlib.h>
 #import <algorithm>
-//#import "CityPoint.h"
+//#import "OrgPoint.h"
 #import "BoundingPolygon.h"
 
 #define PI 3.14159265
@@ -17,7 +17,7 @@
 
 using namespace std;
 
-@interface CityMath : NSObject {
+@interface OrgMath : NSObject {
 
 }
 + (float) gausian:(float)median deviation:(float)dev;

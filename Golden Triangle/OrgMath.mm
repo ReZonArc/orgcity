@@ -1,15 +1,15 @@
 //
-//  CityMath.m
+//  OrgMath.m
 //  Golden Triangle
 //
 //  Created by Alex Bullard on 1/6/11.
 //  Copyright 2011 Middlebury College. All rights reserved.
 //
 
-#import "CityMath.h"
+#import "OrgMath.h"
 
 
-@implementation CityMath
+@implementation OrgMath
 
 // Box-Muller Polar Transform
 + (float) gausian:(float)mean deviation:(float)dev {

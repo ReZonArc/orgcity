@@ -1,24 +1,24 @@
 //
-//  CityObject.m
+//  OrgObject.m
 //  Golden Triangle
 //
 //  Created by Alex Bullard on 1/7/11.
 //  Copyright 2011 Middlebury College. All rights reserved.
 //
 
-#import "CityObject.h"
+#import "OrgObject.h"
 
 
-@implementation CityObject
+@implementation OrgObject
 
--(CityObject *) initWithPolygons:(NSArray *)poly{
+-(OrgObject *) initWithPolygons:(NSArray *)poly{
 	self = [super init];
 	polygonList = [[NSArray alloc] initWithArray:poly];
 	return self;
 
 }
 
--(CityObject *) init {
+-(OrgObject *) init {
 	self = [super init];
 	polygonList = [[NSArray alloc] init];
 	return self;

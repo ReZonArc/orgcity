@@ -1,5 +1,5 @@
 //
-//  CityPoint.h
+//  OrgPoint.h
 //  Golden Triangle
 //
 //  Created by Alex Bullard on 1/6/11.
@@ -9,13 +9,13 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface CityPoint : NSObject {
+@interface OrgPoint : NSObject {
 	float  x;
 	float  y;
 	float  z;	
 }
 
--(CityPoint *) initWithX:(float)ix y:(float)iy z:(float)iz;
+-(OrgPoint *) initWithX:(float)ix y:(float)iy z:(float)iz;
 -(float) x;
 -(float) y;
 -(float) z;

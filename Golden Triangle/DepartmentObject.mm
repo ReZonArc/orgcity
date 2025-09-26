@@ -1,25 +1,25 @@
 
 
-#import "BuildingObject.h"
+#import "DepartmentObject.h"
 #import "BoundingPolygon.h"
 
 
-@implementation BuildingObject
+@implementation DepartmentObject
 
-+ (void) initWithBounds:(vector<CityVertex> &)vertices faces:(vector<CityPolygon> &)faces startIndex:(int)si avgHeight:(float)height{
++ (void) initWithBounds:(vector<OrgVertex> &)vertices faces:(vector<OrgPolygon> &)faces startIndex:(int)si avgHeight:(float)height{
 	//[super initWithPolygons:[[NSArray alloc] init]];
 	//wallPolygons = [[NSMutableArray alloc] init];
 	//basePolygon = bounds;
-	//vector<CityVertex> vertices = *v;
-	//vector<CityPolygon> faces = *f;
+	//vector<OrgVertex> vertices = *v;
+	//vector<OrgPolygon> faces = *f;
 	
-	int numberOfTiers = [CityMath poisson:0.5]+1;
+	int numberOfTiers = [OrgMath poisson:0.5]+1;
 
-	double buildingHeight = std::max([CityMath gausian:height deviation:4], (float)MINHEIGHT);
-	double windowSizeX = [CityMath gausian:0.2 deviation:0.05];
-	double windowSizeY = [CityMath gausian:0.2 deviation:0.05];
-	double windowSeparationX = [CityMath gausian:0.1 deviation:0.05];
-	double windowSeparationY = [CityMath gausian:0.1 deviation:0.1];
+	double departmentHeight = std::max([OrgMath gausian:height deviation:4], (float)MINHEIGHT);
+	double windowSizeX = [OrgMath gausian:0.2 deviation:0.05];
+	double windowSizeY = [OrgMath gausian:0.2 deviation:0.05];
+	double windowSeparationX = [OrgMath gausian:0.1 deviation:0.05];
+	double windowSeparationY = [OrgMath gausian:0.1 deviation:0.1];
 	
 	if(windowSeparationX < 0){
 		windowSeparationX = 0.1;
@@ -44,7 +44,7 @@
 	int baseSize = ovn - si;
 	int startIndexFace = faces.size();
 	for (int v=si; v<ovn; v++) {
-		vertices.push_back(CityVertex(vertices[v].x, vertices[v].y+buildingHeight, vertices[v].z));
+		vertices.push_back(OrgVertex(vertices[v].x, vertices[v].y+departmentHeight, vertices[v].z));
 	}
 	// Define faces, every original vertex is the starting point for a face
 
@@ -56,7 +56,7 @@
 		}
 		int fv[4] = {v,nextIndex,nextIndex+baseSize,v+baseSize};
 		vector<int> vv = vector<int>(fv, fv + sizeof(fv)/sizeof(fv[0]));
-		faces.push_back(CityPolygon(vv,dl,sl,el, vertices));
+		faces.push_back(OrgPolygon(vv,dl,sl,el, vertices));
 	}
 	int povn = faces.size();
 	//Add Top
@@ -71,7 +71,7 @@
 	cy /= vertices.size()-ovn;
 	cz /= vertices.size()-ovn;
 	cy += max([CityMath gausian:1.0 deviation:.5],0.0f);
-	CityVertex center(cx, cy, cz);
+	OrgVertex center(cx, cy, cz);
 	vertices.push_back(center);
 	for (int v=ovn; v<vertices.size()-1; v++) {
 		vector<int> tv;
@@ -80,11 +80,11 @@
 		else tv.push_back(ovn);
 		tv.push_back(vertices.size()-1);
 		
-		faces.push_back(CityPolygon(tv, dl, sl,el, vertices));
+		faces.push_back(OrgPolygon(tv, dl, sl,el, vertices));
 	}
 	
 	
-	//faces.push_back(CityPolygon(tv,dl,sl,el));
+	//faces.push_back(OrgPolygon(tv,dl,sl,el));
 	// defining the building also generates the normals
 	//building = CityPolyObject(vertices, faces);
 	
@@ -109,7 +109,7 @@
 	// Add roof vertices
 	int ovn = vertices.size();
 	for (int v=0; v<ovn; v++) {
-		vertices.push_back(CityVertex(vertices[v].x, vertices[v].y+buildingHeight, vertices[v].z));
+		vertices.push_back(OrgVertex(vertices[v].x, vertices[v].y+departmentHeight, vertices[v].z));
 	}
 
 	// Define faces, every original vertex is the starting point for a face
@@ -121,7 +121,7 @@
 		}
 		int fv[4] = {v,nextIndex,nextIndex+ovn,v+ovn};
 		vector<int> vv = vector<int>(fv, fv + sizeof(fv)/sizeof(fv[0]));
-		faces.push_back(CityPolygon(vv,dl,sl,el));
+		faces.push_back(OrgPolygon(vv,dl,sl,el));
 		faces.back().calculateNormal(vertices);
 	}
 	//Add Top
@@ -129,7 +129,7 @@
 	for (int v=ovn; v<vertices.size(); v++) {
 		tv.push_back(v);
 	}
-	faces.push_back(CityPolygon(tv,dl,sl,el));
+	faces.push_back(OrgPolygon(tv,dl,sl,el));
 	// defining the building also generates the normals
 	//building = CityPolyObject(vertices, faces);
 	
@@ -156,17 +156,17 @@
 }*/
 
 // Populate Windows
-+ (void) addWindowsToFace:(int)faceIndex v:(vector<CityVertex> &)vertices f:(vector<CityPolygon> &)faces wx:(double)windowSizeX wy:(double) windowSizeY sx:(double)windowSeparationX sy:(double)windowSeparationY{
++ (void) addWindowsToFace:(int)faceIndex v:(vector<OrgVertex> &)vertices f:(vector<OrgPolygon> &)faces wx:(double)windowSizeX wy:(double) windowSizeY sx:(double)windowSeparationX sy:(double)windowSeparationY{
 	
 	// First two points are the base of the face
-	CityVertex pointa = vertices[faces[faceIndex].vertexList[0]];
-	CityVertex pointb = vertices[faces[faceIndex].vertexList[1]];
+	OrgVertex pointa = vertices[faces[faceIndex].vertexList[0]];
+	OrgVertex pointb = vertices[faces[faceIndex].vertexList[1]];
 	double faceHeight = vertices[faces[faceIndex].vertexList[2]].y - pointa.y;
 	
 	int initVertexEnd = vertices.size();
 	
-	//vector<CityVertex> wVertices = vector<CityVertex>(10000);
-	//vector<CityPolygon> wPolygons = vector<CityPolygon>(1000);
+	//vector<OrgVertex> wVertices = vector<OrgVertex>(10000);
+	//vector<OrgPolygon> wPolygons = vector<OrgPolygon>(1000);
 	
 	float deltaX,deltaZ,xAccum,zAccum,yAccum,zInit,xInit;
 	float directionAdjustX = 1.0;
@@ -212,10 +212,10 @@
 		for(int j=0; j<numOfWindowsX; j++){
 			//CounterClockwise?
 			CityNormal norm = faces[faceIndex].faceNormal;
-			vertices.push_back(CityVertex(xAccum + norm.x*.01, deltaY-yAccum + norm.y*.01, zAccum + norm.z*.01));
-			vertices.push_back(CityVertex(xAccum+directionAdjustX*adjustedWindowX+ norm.x*.01, deltaY-yAccum+ norm.y*.01, zAccum+adjustedWindowZ+ norm.z*.01));
-			vertices.push_back(CityVertex(xAccum+directionAdjustX*adjustedWindowX+ norm.x*.01, deltaY-yAccum-windowSizeY+ norm.y*.01, zAccum+adjustedWindowZ+ norm.z*.01));
-			vertices.push_back(CityVertex(xAccum+ norm.x*.01, deltaY-yAccum-windowSizeY+ norm.y*.01, zAccum+ norm.z*.01));
+			vertices.push_back(OrgVertex(xAccum + norm.x*.01, deltaY-yAccum + norm.y*.01, zAccum + norm.z*.01));
+			vertices.push_back(OrgVertex(xAccum+directionAdjustX*adjustedWindowX+ norm.x*.01, deltaY-yAccum+ norm.y*.01, zAccum+adjustedWindowZ+ norm.z*.01));
+			vertices.push_back(OrgVertex(xAccum+directionAdjustX*adjustedWindowX+ norm.x*.01, deltaY-yAccum-windowSizeY+ norm.y*.01, zAccum+adjustedWindowZ+ norm.z*.01));
+			vertices.push_back(OrgVertex(xAccum+ norm.x*.01, deltaY-yAccum-windowSizeY+ norm.y*.01, zAccum+ norm.z*.01));
 			xAccum = xAccum+directionAdjustX*(adjustedWindowX+2*adjustedWindowSpacerX);
 			zAccum = zAccum+(adjustedWindowZ+2*adjustedWindowSpacerZ);
 			
@@ -228,7 +228,7 @@
 				int wv[4] = {vertexIndex, vertexIndex+1, vertexIndex+2, vertexIndex+3};
 				vector<int> vwv = vector<int>(wv, wv + sizeof(wv)/sizeof(wv[0]));
 				vertexIndex += 4;
-				faces.push_back(CityPolygon(vwv, dl,sl,el,faces[faceIndex].faceNormal));
+				faces.push_back(OrgPolygon(vwv, dl,sl,el,faces[faceIndex].faceNormal));
 				//wPolygons.back().faceNormal = face.faceNormal;
 				
 			}else{
@@ -239,7 +239,7 @@
 				int wv[4] = {vertexIndex, vertexIndex+1, vertexIndex+2, vertexIndex+3};
 				vector<int> vwv = vector<int>(wv, wv + sizeof(wv)/sizeof(wv[0]));
 				vertexIndex += 4;
-				faces.push_back(CityPolygon(vwv, dl,sl,el,faces[faceIndex].faceNormal));
+				faces.push_back(OrgPolygon(vwv, dl,sl,el,faces[faceIndex].faceNormal));
 				//wPolygons.back().faceNormal = face.faceNormal;
 				
 			}
@@ -258,8 +258,8 @@
 	NSMutableArray * top = [[NSMutableArray alloc] init];
 	for(float i=0; i<2*3.14159265; i+=panelSize){
 		[polygonList addObject:[[BoundingPolygon alloc] initWithCoord:[[NSArray alloc] initWithObjects:
-																	   [[CityPoint alloc] initWithX:x+cos(i)*r y:y+buildingHeight z:z+sin(i)*r],
-																	   [[CityPoint alloc] initWithX:x+cos(i+panelSize)*r y:y+buildingHeight z:z+sin(i+panelSize)*r],
+																	   [[CityPoint alloc] initWithX:x+cos(i)*r y:y+departmentHeight z:z+sin(i)*r],
+																	   [[CityPoint alloc] initWithX:x+cos(i+panelSize)*r y:y+departmentHeight z:z+sin(i+panelSize)*r],
 																	   [[CityPoint alloc] initWithX:x+cos(i+panelSize)*r y:y z:z+sin(i+panelSize)*r],
 																	   [[CityPoint alloc] initWithX:x+cos(i)*r y:y z:z+sin(i)*r], nil]
 														  andColorRed:0.0 green:1.0 blue:0.0 border:false]];

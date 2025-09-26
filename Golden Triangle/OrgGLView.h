@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import	<math.h>
-#import "CityGen.h"
+#import "OrgGen.h"
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/gl.h>
 #import <OpenGL/glu.h>
@@ -45,7 +45,7 @@ struct allignedVertex{
 	float padding[2];
 };
 
-@interface CityGLView : NSOpenGLView {
+@interface OrgGLView : NSOpenGLView {
 	// Polygon data
 	GLuint vboID;
 	GLuint ivboID;
